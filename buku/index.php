@@ -4,7 +4,7 @@ require '../header.php';
 
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Data Anggota</h1>
+        <h1 class="mt-4">Data Buku</h1>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
@@ -49,11 +49,11 @@ require '../header.php';
                                 <td class="align-items-center">
                                     <div class="btn-group">
                                         <a href="edit.php?id=<?php echo $row['buku_id']; ?>"><button type="button"
-                                                class="btn btn-success"><i class="fas fa-edit me-1"></i></button></a>
+                                                class="btn btn-success btn-sm"><i class="fas fa-edit me-1"></i></button></a>
                                     </div>
                                     <div class="btn-group">
                                         <a href="delete.php?id=<?php echo $row['buku_id']; ?>"><button type="button"
-                                                class="btn btn-danger"><i class="fas fa-trash me-1"></i></button></a>
+                                                class="btn btn-danger btn-sm"><i class="fas fa-trash me-1"></i></button></a>
                                     </div>
                                 </td>
                             </tr>

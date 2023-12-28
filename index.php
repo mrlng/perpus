@@ -2,8 +2,8 @@
 include 'config/koneksi.php';
 session_start();
  
-if (isset($_SESSION['username'])) {
-    header("Location: anggota/index.php");
+if (isset($_SESSION['id'])) {
+    header("Location: dashboard");
     exit();
 }
  
@@ -16,14 +16,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $_SESSION['nama'] = $row['nama'];
-        header("Location: anggota/index.php");
+        $_SESSION['id'] = $row['staff_id'];
+        header("Location: ../dashboard");
         exit();
-    } else {
-        echo "<script>alert('Email atau password Anda salah. Silakan coba lagi!')</script>";
-    }
-}
-?>
+    } else  { ?>
+    <div class="row justify-content-center">
+        <div class='alert alert-danger alert-dismissible text-center col-lg-4 mt-3'>
+            <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+            <strong>Gagal!</strong> ID dan Password tidak valid.
+        </div>
+    </div>
+    <?php } } ?>
+
+    
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Login - SB Admin</title>
-        <link href="css/styles.css" rel="stylesheet" />
+        <title>Login - LibraryLTE</title>
+        <link href="bootstrap/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="bg-primary">
@@ -49,11 +54,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="card-body">
                                         <form method="POST">
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputID" type="text" placeholder="name@example.com" name="id" />
-                                                <label for="inputID">Email address</label>
+                                                <input class="form-control" id="inputID" type="text" placeholder="ID" name="id" required>
+                                                <label for="inputID">ID</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" name="password"/>
+                                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" name="password" required>
                                                 <label for="inputPassword">Password</label>
                                             </div>
                                             <div class="form-check mb-3">
@@ -62,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a class="small" href="password.html">Forgot Password?</a>
-                                                <button type="submut" name="submit" class="btn btn-primary">Login</button>
+                                                <button type="submit" name="submit" class="btn btn-primary">Login</button>
                                             </div>
                                         </form>
                                     </div>
@@ -79,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                            <div class="text-muted">Copyright &copy; LibraryLTE 2023</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;
@@ -91,6 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        <script src="bootstrap/js/scripts.js"></script>
     </body>
 </html>

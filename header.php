@@ -1,10 +1,9 @@
 <?php 
 session_start();
-if (!isset($_SESSION['nama'])) {
+if (!isset($_SESSION['id'])) {
     header("Location: ../");
     exit(); // Terminate script execution after the redirect
- }
- $nama = $_SESSION['nama']; ?>
+ }   ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,6 +23,35 @@ if (!isset($_SESSION['nama'])) {
             <a class="navbar-brand ps-3" href="index.html">PPKJ</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <span class="d-none d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0">
+                
+            </span>
+            <!-- Navbar-->
+            
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><?php  ?>
+                    <?php
+                    require ('../config/koneksi.php');
+                    $id = $_SESSION['id'];
+                    $sql = "SELECT * FROM staff WHERE staff_id='$id'";
+                    $result = $mysqli->query($sql);
+ 
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        echo $row["nama"];
+                    };
+                    ?>
+                        <i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="../logout.php"><i class="fa fa-power-off"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -31,7 +59,7 @@ if (!isset($_SESSION['nama'])) {
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             
-                            <a class="nav-link" href="../">
+                            <a class="nav-link" href="../dashboard/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>

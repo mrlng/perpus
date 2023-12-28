@@ -49,11 +49,11 @@ require '../header.php';
                                 <td class="align-items-center">
                                     <div class="btn-group">
                                         <a href="edit.php?id=<?php echo $row['anggota_id']; ?>"><button type="button"
-                                                class="btn btn-success"><i class="fas fa-edit me-1"></i></button></a>
+                                                class="btn btn-outline-success btn-sm"><i class="fas fa-edit me-1"></i></button></a>
                                     </div>
                                     <div class="btn-group">
                                         <a href="delete.php?id=<?php echo $row['anggota_id']; ?>"><button type="button"
-                                                class="btn btn-danger"><i class="fas fa-trash me-1"></i></button></a>
+                                                class="btn btn-outline-danger btn-sm"><i class="fas fa-trash me-1"></i></button></a>
                                     </div>
                                 </td>
                             </tr>
