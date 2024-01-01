@@ -1,7 +1,7 @@
 <?php
    include '../config/koneksi.php';
    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_POST['kategori_id'].$_POST['id'];
+    $id = 'B-'.$_POST['kategori_id'].$_POST['buku_id'];
     $judul = $_POST['judul'];
     $pengarang = $_POST['pengarang'];
     $penerbit = $_POST['penerbit'];
@@ -10,13 +10,16 @@
     $kategori_id = $_POST['kategori_id'];
     $sql = "INSERT INTO buku (buku_id, judul, pengarang, penerbit, tahun_terbit, sinopsis, kategori_id) 
            VALUES ('$id', '$judul', '$pengarang', '$penerbit', '$tahun_terbit', '$sinopsis', '$kategori_id')";
-   
+    $qty = (int)$_POST["jumlah"];
     if ($mysqli->query($sql) === TRUE) {
-         $sql = "INSERT INTO katalog (buku_id, kategori_id) VALUES ('$id', '$kategori_id')";
-         if ($mysqli->query($sql) === TRUE) {
-    header("Location: ../buku");
-    exit;
-    }} else {
+        for ($i = 0; $i < $qty; $i++) {
+            $sql2 = "INSERT INTO katalog (katalog_id, buku_id) VALUES ('$id$i', '$id')";
+            $mysqli->query($sql2); }
+        session_start();
+        $_SESSION['success'] = 'Buku berhasil ditambah';
+        header("Location: ../buku");
+        exit;
+    } else {
     echo "Error: " . $sql . "<br>" . $mysqli->error;
     }
     $mysqli->close();
@@ -36,12 +39,12 @@
                             <div class="card-body">
                                 <form method="POST">
                                     <div class="form-floating mb-3 mt-3">
-                                        <input type="text" class="form-control" placeholder="ID Buku" name="id">
-                                        <label for="id">ID Buku</label>
+                                        <input type="text" class="form-control" placeholder="ID Buku" name="buku_id">
+                                        <label for="buku_id">ID Buku</label>
                                     </div>
                                     <div class="form-floating mb-3 mt-3">
                                         <input type="text" class="form-control" placeholder="Judul" name="judul">
-                                        <label for="nama_customer">Judul</label>
+                                        <label for="judul">Judul</label>
                                     </div>
                                     <div class="form-floating mb-3 mt-3">
                                         <textarea type="text" class="form-control" placeholder="Pengarang" name="pengarang"></textarea>
@@ -58,6 +61,10 @@
                                     <div class="form-floating mb-3 mt-3">
                                         <textarea type="text" class="form-control" placeholder="Sinopsis" name="sinopsis"></textarea>
                                         <label for="sinopsis">Sinopsis</label>
+                                    </div>
+                                    <div class="form-floating mb-3 mt-3">
+                                        <input type="number" class="form-control" placeholder="Jumlah" name="jumlah">
+                                        <label for="nama_customer">Jumlah</label>
                                     </div>
                                     <div class="mb-3 mt-3">
                                         <select type="text" class="form-control" name="kategori_id">

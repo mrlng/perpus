@@ -4,6 +4,15 @@ require '../header.php';
 
 <main>
     <div class="container-fluid px-4">
+    <?php 
+    if (isset($_SESSION['success'])) { ?>
+    <div class='alert alert-success alert-dismissible mt-4'>
+        <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+        <strong>Success!</strong> <?php echo $_SESSION['success']?>.
+     </div>
+    <?php
+    unset($_SESSION['success']);
+    }?>
         <h1 class="mt-4">Data Buku</h1>
         <div class="card mb-4">
             <div class="card-header">

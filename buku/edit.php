@@ -11,21 +11,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $sql = "UPDATE buku SET judul='$judul', pengarang='$pengarang', penerbit='$penerbit', tahun_terbit='$tahun_terbit', sinopsis='$sinopsis', kategori_id='$kategori_id' WHERE buku_id='$ID'";
 
       if ($mysqli->query($sql) === TRUE) {
-            header("Location: ../buku"); // Redirect ke tampilan Read setelah berhasil edit data
-            exit;
+        session_start();
+        $_SESSION['success'] = 'Buku berhasil diedit';
+        header("Location: ../buku"); // Redirect ke tampilan Read setelah berhasil edit data
+        exit;
       } else {
             echo "Error: " . $sql . "<br>" . $mysqli->error;
       }
       $mysqli->close();
 }
-$sql2 = "SELECT * FROM kategori";
-$id = $_GET['id']; // ID dari buku yang akan diupdate
-$sql = "SELECT * FROM buku WHERE buku_id=$id";
-$result = $mysqli->query($sql);
-if ($result->num_rows > 0) {
-      $row = $result->fetch_array();
-include '../header.php'
-      ?>
+include '../header.php';?>
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Edit Anggota</h1>
@@ -35,10 +30,20 @@ include '../header.php'
                                 Form Input
                             </div>
                             <div class="card-body">
+
+                            <?php
+                            $sql2 = "SELECT * FROM kategori";
+                            $id = $_GET['id']; // ID dari buku yang akan diupdate
+                            $sql = "SELECT * FROM buku WHERE buku_id='$id'";
+                            $result = $mysqli->query($sql);
+                            if ($result->num_rows > 0) {
+                                  $row = $result->fetch_array();
+                            ?>
+
                                 <form method="POST">
                                     <div class="form-floating mb-3 mt-3">
                                         <input type="text" class="form-control" name="id" value="<?php echo $row['buku_id']; ?>" placeholder="ID Anggota" disabled>
-                                        <label for="id">ID Anggota</label>
+                                        <label for="id">ID Buku</label>
                                     </div>
                                     <div class="form-floating mb-3 mt-3">
                                         <input type="text" class="form-control" value="<?php echo $row['judul']; ?>" placeholder="Judul" name="judul" required>
@@ -75,12 +80,10 @@ include '../header.php'
                                     </div>
                                     <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-save me-1"></i> Simpan</button>
                                 </form>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
                 </main>
-<?php
-   }
-   include '../footer.php';
-?>
+<?php include '../footer.php'; ?>
                               

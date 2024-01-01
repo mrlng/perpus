@@ -3,6 +3,15 @@ require '../header.php';
 ?>
 <main>
 	<div class="container-fluid px-4">
+		<?php 
+  		if (isset($_SESSION['success'])) { ?>
+  		<div class='alert alert-success alert-dismissible mt-4'>
+  		    <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+  		    <strong>Success!</strong> <?php echo $_SESSION['success']?>. buka <a href="riwayat-peminjaman.php" class="alert-link">riwayat peminjaman</a>.
+  		 </div>
+  		<?php
+  		unset($_SESSION['success']);
+  		}?>
 		<h1 class="mt-4">Data Peminjaman</h1>
 		<div class="card mb-4">
 			<div class="card-header">
@@ -28,7 +37,8 @@ require '../header.php';
 						$sql = "SELECT peminjaman.peminjaman_id, buku.judul, anggota.nama, peminjaman.tanggal_peminjaman, peminjaman.tanggal_kembali, peminjaman.status 
 							FROM `peminjaman` 
 							INNER JOIN `buku` ON peminjaman.buku_id=buku.buku_id 
-							INNER JOIN `anggota` ON peminjaman.anggota_id=anggota.anggota_id";
+							INNER JOIN `anggota` ON peminjaman.anggota_id=anggota.anggota_id
+							WHERE peminjaman.status='dipinjam'";
 						$result = $mysqli->query($sql);
 						if ($result->num_rows > 0) {
 							while ($row = $result->fetch_array()) { ?>

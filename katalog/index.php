@@ -3,6 +3,15 @@ require '../header.php';
 ?>
 <main>
    <div class="container-fluid px-4">
+   <?php 
+  if (isset($_SESSION['success'])) { ?>
+  <div class='alert alert-success alert-dismissible mt-4'>
+      <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+      <strong>Success!</strong> <?php echo $_SESSION['success']?>.
+   </div>
+  <?php
+  unset($_SESSION['success']);
+  }?>
       <h1 class="mt-4">Data Buku</h1>
       <div class="card mb-4">
          <div class="card-header">
@@ -19,17 +28,34 @@ require '../header.php';
                      <th>Penerbit</th>
                      <th>Tahun Terbit</th>
                      <th>kategori</th>
-                     <th>Status</th>
+                     <th>Jumlah</th>
                      <th>Aksi</th>
                   </tr>
                </thead>
                <tbody>
                   <?php
                   include '../config/koneksi.php';
-                  $sql = "SELECT katalog.*, buku.*, kategori.*, peminjaman.status FROM katalog 
-                     LEFT JOIN buku ON katalog.buku_id=buku.buku_id 
-                     LEFT JOIN kategori ON katalog.kategori_id=kategori.kategori_id 
-                     LEFT JOIN peminjaman ON buku.buku_id=peminjaman.buku_id";
+                  
+                  $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                  $uri_segments = explode('/', $uri_path);
+                  
+                  if (!isset($_GET['kategori'])) {
+                     $sql = "SELECT count('katalog.buku_id') as 'qty', katalog.*, buku.*, kategori.* FROM katalog 
+                        LEFT JOIN buku ON katalog.buku_id=buku.buku_id 
+                        LEFT JOIN kategori ON buku.kategori_id=kategori.kategori_id
+                        GROUP BY katalog.buku_id"
+                        ;
+                  } else {
+
+                     $kategori_id = $_GET['kategori'];
+                     $sql = "SELECT count('katalog.buku_id') as 'qty', katalog.*, buku.*, kategori.* FROM katalog 
+                        LEFT JOIN buku ON katalog.buku_id=buku.buku_id 
+                        LEFT JOIN kategori ON buku.kategori_id=kategori.kategori_id
+                        WHERE buku.kategori_id='$kategori_id'
+                        GROUP BY katalog.buku_id";
+
+                     
+                  }
                   $result = $mysqli->query($sql);
                   if ($result->num_rows > 0) {
                      while ($row = $result->fetch_assoc()) { ?>
@@ -53,30 +79,13 @@ require '../header.php';
                               <?php echo $row["nama_kategori"]; ?>
                            </td>
                            <td>
-                              <?php
-                              if ($row["status"] == "") {
-                                 echo "Ready";
-                              } else {
-                                 echo $row["status"];
-                              } ?>
+                              <?php echo $row["qty"]; ?>
                            </td>
                            <td>
-                              <a href="detail.php?id=<?php echo $row["buku_id"]; ?>">
-                                 <button type="button" class="btn btn-secondary btn-sm">
-                                    <i class="fa fa-eye"></i>
-                                 </button>
+                              <a href="../katalog/detail.php?id=<?php echo $row["buku_id"]; ?>">
+                                 <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></button>
                               </a>
-                           <?php
-                           if ($row["status"] == "dipinjam") { ?>
-                                 <button type="button" class="btn btn-secondary btn-sm" disabled>Dipinjam</button>
-                              </td>
-                           <?php
-                           } else { ?>
-                                    <a href="../katalog/pinjam.php?id=<?php echo $row["buku_id"]; ?>">
-                                    <button type="button" class="btn btn-primary btn-sm">Pinjam</button>
-                                 </a>
-                              </td>
-                           <?php } ?>
+                           </td>
                         </tr>
                      <?php }
                   } ?>
